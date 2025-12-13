@@ -16,7 +16,7 @@ class DODropletSSHKeysSOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure authentication. Use SSH keys instead of passwords."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         ssh_keys = conf.get('ssh_keys')
         if ssh_keys and len(ssh_keys) > 0:
             return CheckResult.PASSED
@@ -32,7 +32,7 @@ class DOFirewallDefaultDenySOC2(BaseResourceCheck):
         guideline = "SOC2 requires access controls. Define explicit firewall rules."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         inbound_rules = conf.get('inbound_rule', [])
         outbound_rules = conf.get('outbound_rule', [])
 
@@ -50,7 +50,7 @@ class DOSpacesACLSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access controls. Use private ACL for Spaces buckets."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         acl = conf.get('acl', [''])[0]
         if acl == 'private':
             return CheckResult.PASSED
@@ -68,7 +68,7 @@ class DODatabaseFirewallSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network access controls. Configure database firewall rules."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         rules = conf.get('rule', [])
         if rules and len(rules) > 0:
             return CheckResult.PASSED
@@ -84,7 +84,7 @@ class DOKubernetesRBACSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access controls. RBAC is enabled by default in DOKS."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 

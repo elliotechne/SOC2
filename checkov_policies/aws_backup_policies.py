@@ -16,7 +16,7 @@ class RDSBackupRetentionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Set RDS backup retention >= 7 days."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         backup_retention_period = conf.get('backup_retention_period', [0])[0]
         if backup_retention_period >= 7:
             return CheckResult.PASSED
@@ -32,7 +32,7 @@ class S3VersioningEnabledSOC2(BaseResourceCheck):
         guideline = "SOC2 requires data protection. Enable S3 bucket versioning."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_s3_bucket_versioning':
             versioning_configuration = conf.get('versioning_configuration', [])
             if versioning_configuration:
@@ -61,7 +61,7 @@ class DynamoDBBackupSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Enable PITR for DynamoDB."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         point_in_time_recovery = conf.get('point_in_time_recovery')
         if point_in_time_recovery and point_in_time_recovery[0].get('enabled', [False])[0]:
             return CheckResult.PASSED
@@ -77,7 +77,7 @@ class EBSSnapshotSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Create EBS snapshot policies."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         policy_details = conf.get('policy_details')
         if policy_details:
             return CheckResult.PASSED
@@ -93,7 +93,7 @@ class BackupVaultEnabledSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup strategy. Configure AWS Backup vaults."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         name = conf.get('name')
         if name:
             return CheckResult.PASSED
@@ -109,7 +109,7 @@ class BackupPlanEnabledSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup strategy. Configure backup plans."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         rule = conf.get('rule')
         if rule and len(rule) > 0:
             return CheckResult.PASSED
@@ -125,7 +125,7 @@ class RDSMultiAZSOC2(BaseResourceCheck):
         guideline = "SOC2 requires high availability. Enable Multi-AZ for RDS."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         multi_az = conf.get('multi_az', [False])[0]
         if multi_az:
             return CheckResult.PASSED

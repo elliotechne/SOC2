@@ -16,7 +16,7 @@ class GCPFirewallRestrictedIngressSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network segmentation. Restrict firewall ingress."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         direction = conf.get('direction', ['INGRESS'])[0]
         if direction == 'INGRESS':
             source_ranges = conf.get('source_ranges', [])
@@ -36,7 +36,7 @@ class GCPFirewallNoSSHFromInternetSOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure access. Do not expose SSH to the internet."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         direction = conf.get('direction', ['INGRESS'])[0]
         if direction == 'INGRESS':
             allow_rules = conf.get('allow', [])
@@ -67,7 +67,7 @@ class GCPFirewallNoRDPFromInternetSOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure access. Do not expose RDP to the internet."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         direction = conf.get('direction', ['INGRESS'])[0]
         if direction == 'INGRESS':
             allow_rules = conf.get('allow', [])
@@ -98,7 +98,7 @@ class GCPVPCFlowLogsEnabledSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network monitoring. Enable VPC flow logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         log_config = conf.get('log_config')
         if log_config:
             return CheckResult.PASSED
@@ -114,7 +114,7 @@ class GCPSQLNoPublicIPSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network isolation. Cloud SQL should use private IPs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         settings = conf.get('settings', [])
         if settings:
             for setting in settings:
@@ -136,7 +136,7 @@ class GCPComputeSerialPortsDisabledSOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure access. Disable serial port access."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         metadata = conf.get('metadata', [{}])[0]
         serial_port_enable = metadata.get('serial-port-enable', 'FALSE')
         if serial_port_enable == 'FALSE':

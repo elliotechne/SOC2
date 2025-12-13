@@ -16,7 +16,7 @@ class DODropletBackupsSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Enable droplet backups."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         backups = conf.get('backups', [False])[0]
         if backups:
             return CheckResult.PASSED
@@ -32,7 +32,7 @@ class DODatabaseBackupsSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Database backups are automatic in DO."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 
@@ -45,7 +45,7 @@ class DOVolumeSnapshotSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Create volume snapshots."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         volume_id = conf.get('volume_id')
         if volume_id:
             return CheckResult.PASSED
@@ -61,7 +61,7 @@ class DOKubernetesBackupSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Implement K8s backup strategy."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 
@@ -74,7 +74,7 @@ class DOSpacesLifecycleSOC2(BaseResourceCheck):
         guideline = "SOC2 requires data retention policies. Configure lifecycle rules."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         lifecycle_rule = conf.get('lifecycle_rule')
         if lifecycle_rule:
             return CheckResult.PASSED
@@ -90,7 +90,7 @@ class DODatabaseHighAvailabilitySOC2(BaseResourceCheck):
         guideline = "SOC2 requires high availability. Use multiple nodes for databases."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         node_count = conf.get('node_count', [1])[0]
         if node_count >= 2:
             return CheckResult.PASSED

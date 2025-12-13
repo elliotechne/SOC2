@@ -16,7 +16,7 @@ class CloudTrailEnabledSOC2(BaseResourceCheck):
         guideline = "SOC2 requires audit logging. Enable CloudTrail for all regions."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         is_multi_region = conf.get('is_multi_region_trail', [False])[0]
         include_global_events = conf.get('include_global_service_events', [False])[0]
 
@@ -34,7 +34,7 @@ class CloudTrailLogValidationSOC2(BaseResourceCheck):
         guideline = "SOC2 requires log integrity. Enable log file validation."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         log_validation = conf.get('enable_log_file_validation', [False])[0]
         if log_validation:
             return CheckResult.PASSED
@@ -50,7 +50,7 @@ class VPCFlowLogsSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network traffic logging. Enable VPC Flow Logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         traffic_type = conf.get('traffic_type', [''])[0]
         if traffic_type == 'ALL':
             return CheckResult.PASSED
@@ -66,7 +66,7 @@ class S3BucketAccessLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access logging. Enable S3 bucket access logging."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_s3_bucket_logging':
             target_bucket = conf.get('target_bucket')
             if target_bucket:
@@ -89,7 +89,7 @@ class ALBAccessLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access logging. Enable load balancer access logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         access_logs = conf.get('access_logs', [])
         if access_logs:
             for log_config in access_logs:
@@ -108,7 +108,7 @@ class RDSLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires database logging. Enable RDS enhanced monitoring and logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         enabled_cloudwatch_logs = conf.get('enabled_cloudwatch_logs_exports', [])
         if enabled_cloudwatch_logs and len(enabled_cloudwatch_logs) > 0:
             return CheckResult.PASSED
@@ -124,7 +124,7 @@ class CloudWatchLogRetentionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires log retention. Set retention policy for CloudWatch logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         retention_days = conf.get('retention_in_days', [0])[0]
         if retention_days >= 90:
             return CheckResult.PASSED

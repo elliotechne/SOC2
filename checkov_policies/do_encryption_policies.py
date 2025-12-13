@@ -16,7 +16,7 @@ class DOVolumeEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Enable volume encryption."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         initial_filesystem_type = conf.get('initial_filesystem_type', [''])[0]
         if initial_filesystem_type == 'ext4':
             return CheckResult.PASSED
@@ -32,7 +32,7 @@ class DODatabaseEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption in transit. Databases are encrypted by default in DO."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 
@@ -45,7 +45,7 @@ class DOLoadBalancerHTTPSSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data in transit. Configure HTTPS forwarding rules."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         forwarding_rules = conf.get('forwarding_rule', [])
         if not forwarding_rules:
             return CheckResult.FAILED
@@ -71,7 +71,7 @@ class DOSpacesEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Spaces are encrypted by default."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 
@@ -84,7 +84,7 @@ class DODropletSSHOnlySOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure authentication. Use SSH keys instead of passwords."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         ssh_keys = conf.get('ssh_keys')
         if ssh_keys and len(ssh_keys) > 0:
             return CheckResult.PASSED

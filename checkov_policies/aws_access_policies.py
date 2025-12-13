@@ -16,7 +16,7 @@ class IAMPasswordPolicySOC2(BaseResourceCheck):
         guideline = "SOC2 requires strong password policies. Enforce minimum length, complexity, and rotation."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         min_length = conf.get('minimum_password_length', [0])[0]
         require_lowercase = conf.get('require_lowercase_characters', [False])[0]
         require_uppercase = conf.get('require_uppercase_characters', [False])[0]
@@ -43,7 +43,7 @@ class IAMUserMFASOC2(BaseResourceCheck):
         guideline = "SOC2 requires MFA for sensitive access. Enable MFA for all IAM users."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         tags = conf.get('tags', [{}])[0]
         if tags.get('MFAEnabled') == 'true':
             return CheckResult.PASSED
@@ -59,7 +59,7 @@ class S3BucketPublicAccessSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access controls. Block public access to S3 buckets."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_s3_bucket_public_access_block':
             block_public_acls = conf.get('block_public_acls', [False])[0]
             block_public_policy = conf.get('block_public_policy', [False])[0]
@@ -81,7 +81,7 @@ class IAMRoleAssumeRolePolicySOC2(BaseResourceCheck):
         guideline = "SOC2 requires least privilege access. Define specific assume role policies."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         assume_role_policy = conf.get('assume_role_policy')
         if assume_role_policy:
             return CheckResult.PASSED
@@ -97,7 +97,7 @@ class RootAccountMFASOC2(BaseResourceCheck):
         guideline = "SOC2 requires MFA for privileged accounts. Enable MFA for root account."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 
@@ -110,7 +110,7 @@ class EC2IMDSv2SOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure access controls. Use IMDSv2 to prevent SSRF attacks."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         metadata_options = conf.get('metadata_options', [])
         if metadata_options:
             for option in metadata_options:

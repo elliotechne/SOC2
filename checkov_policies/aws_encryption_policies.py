@@ -16,7 +16,7 @@ class S3BucketEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Enable S3 bucket encryption."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_s3_bucket_server_side_encryption_configuration':
             if 'rule' in conf:
                 return CheckResult.PASSED
@@ -37,7 +37,7 @@ class EBSVolumeEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Enable EBS volume encryption."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_ebs_volume':
             if conf.get('encrypted', [False])[0] is True:
                 return CheckResult.PASSED
@@ -67,7 +67,7 @@ class RDSEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Enable RDS encryption."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if conf.get('storage_encrypted', [False])[0] is True:
             return CheckResult.PASSED
         return CheckResult.FAILED
@@ -82,7 +82,7 @@ class EFSEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Enable EFS encryption."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if conf.get('encrypted', [False])[0] is True:
             return CheckResult.PASSED
         return CheckResult.FAILED
@@ -97,7 +97,7 @@ class ALBListenerEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data in transit. Use HTTPS/TLS for load balancer listeners."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         protocol = conf.get('protocol', [''])[0]
         if protocol in ['HTTPS', 'TLS']:
             return CheckResult.PASSED
@@ -113,7 +113,7 @@ class RedshiftEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Enable Redshift encryption."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if conf.get('encrypted', [False])[0] is True:
             return CheckResult.PASSED
         return CheckResult.FAILED
@@ -128,7 +128,7 @@ class DynamoDBEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Enable DynamoDB encryption."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         server_side_encryption = conf.get('server_side_encryption')
         if server_side_encryption and server_side_encryption[0].get('enabled', [False])[0] is True:
             return CheckResult.PASSED

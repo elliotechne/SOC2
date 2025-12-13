@@ -16,7 +16,7 @@ class GCPServiceAccountKeyRotationSOC2(BaseResourceCheck):
         guideline = "SOC2 requires key rotation. Service account keys should be rotated regularly."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         key_algorithm = conf.get('key_algorithm', [''])[0]
         if key_algorithm:
             return CheckResult.PASSED
@@ -32,7 +32,7 @@ class GCPIAMPrimitiveRolesSOC2(BaseResourceCheck):
         guideline = "SOC2 requires least privilege. Avoid primitive roles (Owner, Editor, Viewer)."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         role = conf.get('role', [''])[0]
         primitive_roles = ['roles/owner', 'roles/editor', 'roles/viewer']
 
@@ -50,7 +50,7 @@ class GCPStorageBucketIAMSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access controls. Prevent public access to storage buckets."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         members = conf.get('members', [])
         if members:
             for member_list in members:
@@ -70,7 +70,7 @@ class GCPComputeOSLoginSOC2(BaseResourceCheck):
         guideline = "SOC2 requires centralized access control. Enable OS Login for instances."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         metadata = conf.get('metadata', [{}])[0]
         if metadata.get('enable-oslogin') == 'TRUE':
             return CheckResult.PASSED
@@ -86,7 +86,7 @@ class GCPServiceAccountAdminSOC2(BaseResourceCheck):
         guideline = "SOC2 requires least privilege. Service accounts should not have admin roles."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         role = conf.get('role', [''])[0]
         members = conf.get('members', [])
 

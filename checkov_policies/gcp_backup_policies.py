@@ -16,7 +16,7 @@ class GCPSQLBackupEnabledSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Enable Cloud SQL backups."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         settings = conf.get('settings', [])
         if settings:
             for setting in settings:
@@ -38,7 +38,7 @@ class GCPComputeDiskSnapshotSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Create disk snapshot policies."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         snapshot_schedule_policy = conf.get('snapshot_schedule_policy')
         if snapshot_schedule_policy:
             return CheckResult.PASSED
@@ -54,7 +54,7 @@ class GCPStorageVersioningSOC2(BaseResourceCheck):
         guideline = "SOC2 requires data protection. Enable GCS bucket versioning."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         versioning = conf.get('versioning')
         if versioning and versioning[0].get('enabled', [False])[0]:
             return CheckResult.PASSED
@@ -70,7 +70,7 @@ class GCPSQLHighAvailabilitySOC2(BaseResourceCheck):
         guideline = "SOC2 requires high availability. Enable HA for Cloud SQL."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         settings = conf.get('settings', [])
         if settings:
             for setting in settings:
@@ -90,7 +90,7 @@ class GCPBigtableBackupSOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Configure Bigtable backups."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         cluster = conf.get('cluster', [])
         if cluster and len(cluster) > 0:
             return CheckResult.PASSED
@@ -106,7 +106,7 @@ class GCPSQLPointInTimeRecoverySOC2(BaseResourceCheck):
         guideline = "SOC2 requires backup and recovery. Enable PITR for Cloud SQL."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         settings = conf.get('settings', [])
         if settings:
             for setting in settings:

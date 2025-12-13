@@ -16,7 +16,7 @@ class GCPStorageBucketEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Use CMEK for GCS buckets."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         encryption = conf.get('encryption')
         if encryption and encryption[0].get('default_kms_key_name'):
             return CheckResult.PASSED
@@ -32,7 +32,7 @@ class GCPComputeDiskEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Use CMEK for compute disks."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'google_compute_disk':
             if conf.get('disk_encryption_key'):
                 return CheckResult.PASSED
@@ -56,7 +56,7 @@ class GCPSQLEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Use CMEK for Cloud SQL."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         encryption = conf.get('encryption_key_name')
         if encryption:
             return CheckResult.PASSED
@@ -72,7 +72,7 @@ class GCPBigQueryEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Use CMEK for BigQuery."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         encryption_config = conf.get('encryption_configuration')
         if encryption_config and encryption_config[0].get('kms_key_name'):
             return CheckResult.PASSED
@@ -88,7 +88,7 @@ class GCPLoadBalancerHTTPSSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data in transit. Use HTTPS for load balancers."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'google_compute_target_https_proxy':
             return CheckResult.PASSED
         return CheckResult.FAILED
@@ -103,7 +103,7 @@ class GCPPubSubEncryptionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires encryption of data at rest. Use CMEK for Pub/Sub."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         kms_key_name = conf.get('kms_key_name')
         if kms_key_name:
             return CheckResult.PASSED

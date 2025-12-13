@@ -16,7 +16,7 @@ class SecurityGroupRestrictedIngressSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network segmentation. Restrict security group ingress."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_security_group_rule':
             rule_type = conf.get('type', [''])[0]
             if rule_type == 'ingress':
@@ -45,7 +45,7 @@ class SecurityGroupNoSSHFromInternetSOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure access. Do not expose SSH to the internet."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_security_group_rule':
             rule_type = conf.get('type', [''])[0]
             if rule_type == 'ingress':
@@ -82,7 +82,7 @@ class SecurityGroupNoRDPFromInternetSOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure access. Do not expose RDP to the internet."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_security_group_rule':
             rule_type = conf.get('type', [''])[0]
             if rule_type == 'ingress':
@@ -119,7 +119,7 @@ class VPCDefaultSecurityGroupSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network controls. Restrict default security group."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         ingress_rules = conf.get('ingress', [])
         egress_rules = conf.get('egress', [])
 
@@ -137,7 +137,7 @@ class NetworkACLRestrictiveSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network controls. Configure restrictive NACLs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         if entity_type == 'aws_network_acl_rule':
             rule_action = conf.get('rule_action', [''])[0]
             cidr_block = conf.get('cidr_block', [''])[0]
@@ -166,7 +166,7 @@ class RDSPublicAccessSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network isolation. RDS instances should not be public."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         publicly_accessible = conf.get('publicly_accessible', [False])[0]
         if not publicly_accessible:
             return CheckResult.PASSED

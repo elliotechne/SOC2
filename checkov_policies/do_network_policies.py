@@ -16,7 +16,7 @@ class DOFirewallRestrictedIngressSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network segmentation. Configure restrictive firewall rules."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         inbound_rules = conf.get('inbound_rule', [])
 
         for rule in inbound_rules:
@@ -37,7 +37,7 @@ class DOFirewallNoSSHFromInternetSOC2(BaseResourceCheck):
         guideline = "SOC2 requires secure access. Do not expose SSH to the internet."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         inbound_rules = conf.get('inbound_rule', [])
 
         for rule in inbound_rules:
@@ -62,7 +62,7 @@ class DODatabasePrivateNetworkSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network isolation. Use private networking for databases."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         private_network_uuid = conf.get('private_network_uuid')
         if private_network_uuid:
             return CheckResult.PASSED
@@ -78,7 +78,7 @@ class DOKubernetesPrivateClusterSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network isolation. Use VPC for Kubernetes clusters."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         vpc_uuid = conf.get('vpc_uuid')
         if vpc_uuid:
             return CheckResult.PASSED
@@ -94,7 +94,7 @@ class DODropletPrivateNetworkingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network isolation. Enable private networking for droplets."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         private_networking = conf.get('private_networking', [False])[0]
         vpc_uuid = conf.get('vpc_uuid')
 
@@ -112,7 +112,7 @@ class DOVPCConfiguredSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network segmentation. Configure VPC appropriately."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         ip_range = conf.get('ip_range')
         if ip_range:
             return CheckResult.PASSED

@@ -16,7 +16,7 @@ class DOKubernetesLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires monitoring. Kubernetes clusters include built-in monitoring."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 
@@ -29,7 +29,7 @@ class DODatabaseLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires database logging. Database logs are enabled by default."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         return CheckResult.PASSED
 
 
@@ -42,7 +42,7 @@ class DOMonitoringAlertSOC2(BaseResourceCheck):
         guideline = "SOC2 requires monitoring and alerting. Configure monitoring alerts."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         alerts = conf.get('alerts')
         if alerts:
             return CheckResult.PASSED
@@ -58,7 +58,7 @@ class DOLoadBalancerMonitoringSOC2(BaseResourceCheck):
         guideline = "SOC2 requires availability monitoring. Configure health checks."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         healthcheck = conf.get('healthcheck')
         if healthcheck:
             return CheckResult.PASSED
@@ -74,7 +74,7 @@ class DOFirewallLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network monitoring. Configure firewall rules."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         inbound_rules = conf.get('inbound_rule', [])
         outbound_rules = conf.get('outbound_rule', [])
 

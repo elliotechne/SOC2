@@ -16,7 +16,7 @@ class GCPProjectLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires audit logging. Enable Cloud Logging for projects."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         destination = conf.get('destination')
         if destination:
             return CheckResult.PASSED
@@ -32,7 +32,7 @@ class GCPStorageBucketLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access logging. Enable logging for GCS buckets."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         logging = conf.get('logging')
         if logging and logging[0].get('log_bucket'):
             return CheckResult.PASSED
@@ -48,7 +48,7 @@ class GCPSQLAuditLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires database audit logging. Enable Cloud SQL audit logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         settings = conf.get('settings', [])
         if settings:
             for setting in settings:
@@ -68,7 +68,7 @@ class GCPComputeFlowLogsSOC2(BaseResourceCheck):
         guideline = "SOC2 requires network traffic logging. Enable VPC flow logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         log_config = conf.get('log_config')
         if log_config:
             return CheckResult.PASSED
@@ -84,7 +84,7 @@ class GCPLoadBalancerLoggingSOC2(BaseResourceCheck):
         guideline = "SOC2 requires access logging. Enable load balancer logging."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         log_config = conf.get('log_config')
         if log_config and log_config[0].get('enable', [False])[0]:
             return CheckResult.PASSED
@@ -100,7 +100,7 @@ class GCPAuditLogRetentionSOC2(BaseResourceCheck):
         guideline = "SOC2 requires log retention. Configure retention for audit logs."
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
-    def scan_resource_conf(self, conf, entity_type):
+    def scan_resource_conf(self, conf):
         retention_days = conf.get('retention_days', [0])[0]
         if retention_days >= 90:
             return CheckResult.PASSED
