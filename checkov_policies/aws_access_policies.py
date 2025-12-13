@@ -60,14 +60,14 @@ class S3BucketPublicAccessSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_s3_bucket_public_access_block':
-            block_public_acls = conf.get('block_public_acls', [False])[0]
-            block_public_policy = conf.get('block_public_policy', [False])[0]
-            ignore_public_acls = conf.get('ignore_public_acls', [False])[0]
-            restrict_public_buckets = conf.get('restrict_public_buckets', [False])[0]
+        # Check for public access block settings
+        block_public_acls = conf.get('block_public_acls', [False])[0]
+        block_public_policy = conf.get('block_public_policy', [False])[0]
+        ignore_public_acls = conf.get('ignore_public_acls', [False])[0]
+        restrict_public_buckets = conf.get('restrict_public_buckets', [False])[0]
 
-            if block_public_acls and block_public_policy and ignore_public_acls and restrict_public_buckets:
-                return CheckResult.PASSED
+        if block_public_acls and block_public_policy and ignore_public_acls and restrict_public_buckets:
+            return CheckResult.PASSED
 
         return CheckResult.FAILED
 

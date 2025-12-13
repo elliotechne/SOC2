@@ -67,15 +67,15 @@ class S3BucketAccessLoggingSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_s3_bucket_logging':
-            target_bucket = conf.get('target_bucket')
-            if target_bucket:
-                return CheckResult.PASSED
+        # Check for target_bucket (aws_s3_bucket_logging)
+        target_bucket = conf.get('target_bucket')
+        if target_bucket:
+            return CheckResult.PASSED
 
-        if entity_type == 'aws_s3_bucket':
-            logging = conf.get('logging')
-            if logging:
-                return CheckResult.PASSED
+        # Check for logging (aws_s3_bucket)
+        logging = conf.get('logging')
+        if logging:
+            return CheckResult.PASSED
 
         return CheckResult.FAILED
 

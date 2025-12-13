@@ -33,21 +33,21 @@ class S3VersioningEnabledSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_s3_bucket_versioning':
-            versioning_configuration = conf.get('versioning_configuration', [])
-            if versioning_configuration:
-                for config in versioning_configuration:
-                    status = config.get('status', [''])[0]
-                    if status == 'Enabled':
-                        return CheckResult.PASSED
+        # Check for versioning_configuration (aws_s3_bucket_versioning)
+        versioning_configuration = conf.get('versioning_configuration', [])
+        if versioning_configuration:
+            for config in versioning_configuration:
+                status = config.get('status', [''])[0]
+                if status == 'Enabled':
+                    return CheckResult.PASSED
 
-        if entity_type == 'aws_s3_bucket':
-            versioning = conf.get('versioning', [])
-            if versioning:
-                for config in versioning:
-                    enabled = config.get('enabled', [False])[0]
-                    if enabled:
-                        return CheckResult.PASSED
+        # Check for versioning (aws_s3_bucket)
+        versioning = conf.get('versioning', [])
+        if versioning:
+            for config in versioning:
+                enabled = config.get('enabled', [False])[0]
+                if enabled:
+                    return CheckResult.PASSED
 
         return CheckResult.FAILED
 

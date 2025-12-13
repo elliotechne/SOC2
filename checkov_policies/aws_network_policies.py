@@ -17,21 +17,21 @@ class SecurityGroupRestrictedIngressSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_security_group_rule':
-            rule_type = conf.get('type', [''])[0]
-            if rule_type == 'ingress':
-                cidr_blocks = conf.get('cidr_blocks', [])
-                for cidr_list in cidr_blocks:
-                    if '0.0.0.0/0' in cidr_list or '::/0' in cidr_list:
-                        return CheckResult.FAILED
+        # Check for aws_security_group_rule
+        rule_type = conf.get('type', [''])[0]
+        if rule_type == 'ingress':
+            cidr_blocks = conf.get('cidr_blocks', [])
+            for cidr_list in cidr_blocks:
+                if '0.0.0.0/0' in cidr_list or '::/0' in cidr_list:
+                    return CheckResult.FAILED
 
-        if entity_type == 'aws_security_group':
-            ingress_rules = conf.get('ingress', [])
-            for rule in ingress_rules:
-                cidr_blocks = rule.get('cidr_blocks', [])
-                for cidr_list in cidr_blocks:
-                    if '0.0.0.0/0' in cidr_list or '::/0' in cidr_list:
-                        return CheckResult.FAILED
+        # Check for aws_security_group
+        ingress_rules = conf.get('ingress', [])
+        for rule in ingress_rules:
+            cidr_blocks = rule.get('cidr_blocks', [])
+            for cidr_list in cidr_blocks:
+                if '0.0.0.0/0' in cidr_list or '::/0' in cidr_list:
+                    return CheckResult.FAILED
 
         return CheckResult.PASSED
 
@@ -46,29 +46,29 @@ class SecurityGroupNoSSHFromInternetSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_security_group_rule':
-            rule_type = conf.get('type', [''])[0]
-            if rule_type == 'ingress':
-                from_port = conf.get('from_port', [0])[0]
-                to_port = conf.get('to_port', [0])[0]
-                cidr_blocks = conf.get('cidr_blocks', [])
+        # Check for aws_security_group_rule
+        rule_type = conf.get('type', [''])[0]
+        if rule_type == 'ingress':
+            from_port = conf.get('from_port', [0])[0]
+            to_port = conf.get('to_port', [0])[0]
+            cidr_blocks = conf.get('cidr_blocks', [])
 
-                if (from_port <= 22 <= to_port):
-                    for cidr_list in cidr_blocks:
-                        if '0.0.0.0/0' in cidr_list:
-                            return CheckResult.FAILED
+            if (from_port <= 22 <= to_port):
+                for cidr_list in cidr_blocks:
+                    if '0.0.0.0/0' in cidr_list:
+                        return CheckResult.FAILED
 
-        if entity_type == 'aws_security_group':
-            ingress_rules = conf.get('ingress', [])
-            for rule in ingress_rules:
-                from_port = rule.get('from_port', [0])[0]
-                to_port = rule.get('to_port', [0])[0]
-                cidr_blocks = rule.get('cidr_blocks', [])
+        # Check for aws_security_group
+        ingress_rules = conf.get('ingress', [])
+        for rule in ingress_rules:
+            from_port = rule.get('from_port', [0])[0]
+            to_port = rule.get('to_port', [0])[0]
+            cidr_blocks = rule.get('cidr_blocks', [])
 
-                if (from_port <= 22 <= to_port):
-                    for cidr_list in cidr_blocks:
-                        if '0.0.0.0/0' in cidr_list:
-                            return CheckResult.FAILED
+            if (from_port <= 22 <= to_port):
+                for cidr_list in cidr_blocks:
+                    if '0.0.0.0/0' in cidr_list:
+                        return CheckResult.FAILED
 
         return CheckResult.PASSED
 
@@ -83,29 +83,29 @@ class SecurityGroupNoRDPFromInternetSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_security_group_rule':
-            rule_type = conf.get('type', [''])[0]
-            if rule_type == 'ingress':
-                from_port = conf.get('from_port', [0])[0]
-                to_port = conf.get('to_port', [0])[0]
-                cidr_blocks = conf.get('cidr_blocks', [])
+        # Check for aws_security_group_rule
+        rule_type = conf.get('type', [''])[0]
+        if rule_type == 'ingress':
+            from_port = conf.get('from_port', [0])[0]
+            to_port = conf.get('to_port', [0])[0]
+            cidr_blocks = conf.get('cidr_blocks', [])
 
-                if (from_port <= 3389 <= to_port):
-                    for cidr_list in cidr_blocks:
-                        if '0.0.0.0/0' in cidr_list:
-                            return CheckResult.FAILED
+            if (from_port <= 3389 <= to_port):
+                for cidr_list in cidr_blocks:
+                    if '0.0.0.0/0' in cidr_list:
+                        return CheckResult.FAILED
 
-        if entity_type == 'aws_security_group':
-            ingress_rules = conf.get('ingress', [])
-            for rule in ingress_rules:
-                from_port = rule.get('from_port', [0])[0]
-                to_port = rule.get('to_port', [0])[0]
-                cidr_blocks = rule.get('cidr_blocks', [])
+        # Check for aws_security_group
+        ingress_rules = conf.get('ingress', [])
+        for rule in ingress_rules:
+            from_port = rule.get('from_port', [0])[0]
+            to_port = rule.get('to_port', [0])[0]
+            cidr_blocks = rule.get('cidr_blocks', [])
 
-                if (from_port <= 3389 <= to_port):
-                    for cidr_list in cidr_blocks:
-                        if '0.0.0.0/0' in cidr_list:
-                            return CheckResult.FAILED
+            if (from_port <= 3389 <= to_port):
+                for cidr_list in cidr_blocks:
+                    if '0.0.0.0/0' in cidr_list:
+                        return CheckResult.FAILED
 
         return CheckResult.PASSED
 
@@ -138,21 +138,21 @@ class NetworkACLRestrictiveSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_network_acl_rule':
-            rule_action = conf.get('rule_action', [''])[0]
-            cidr_block = conf.get('cidr_block', [''])[0]
+        # Check for aws_network_acl_rule
+        rule_action = conf.get('rule_action', [''])[0]
+        cidr_block = conf.get('cidr_block', [''])[0]
 
-            if rule_action == 'allow' and cidr_block == '0.0.0.0/0':
+        if rule_action == 'allow' and cidr_block == '0.0.0.0/0':
+            return CheckResult.FAILED
+
+        # Check for aws_network_acl
+        ingress_rules = conf.get('ingress', [])
+        for rule in ingress_rules:
+            action = rule.get('action', [''])[0]
+            cidr_block = rule.get('cidr_block', [''])[0]
+
+            if action == 'allow' and cidr_block == '0.0.0.0/0':
                 return CheckResult.FAILED
-
-        if entity_type == 'aws_network_acl':
-            ingress_rules = conf.get('ingress', [])
-            for rule in ingress_rules:
-                action = rule.get('action', [''])[0]
-                cidr_block = rule.get('cidr_block', [''])[0]
-
-                if action == 'allow' and cidr_block == '0.0.0.0/0':
-                    return CheckResult.FAILED
 
         return CheckResult.PASSED
 

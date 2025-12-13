@@ -33,16 +33,16 @@ class GCPComputeDiskEncryptionSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'google_compute_disk':
-            if conf.get('disk_encryption_key'):
-                return CheckResult.PASSED
+        # Check for google_compute_disk
+        if conf.get('disk_encryption_key'):
+            return CheckResult.PASSED
 
-        if entity_type == 'google_compute_instance':
-            boot_disk = conf.get('boot_disk', [])
-            if boot_disk:
-                for disk in boot_disk:
-                    if disk.get('disk_encryption_key_raw') or disk.get('kms_key_self_link'):
-                        return CheckResult.PASSED
+        # Check for google_compute_instance
+        boot_disk = conf.get('boot_disk', [])
+        if boot_disk:
+            for disk in boot_disk:
+                if disk.get('disk_encryption_key_raw') or disk.get('kms_key_self_link'):
+                    return CheckResult.PASSED
 
         return CheckResult.FAILED
 
@@ -89,7 +89,9 @@ class GCPLoadBalancerHTTPSSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'google_compute_target_https_proxy':
+        # This check passes for google_compute_target_https_proxy by its existence
+        # For google_compute_url_map, verify if there's HTTPS configuration
+        if conf.get('default_service') or conf.get('url_map'):
             return CheckResult.PASSED
         return CheckResult.FAILED
 

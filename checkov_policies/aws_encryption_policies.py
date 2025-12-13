@@ -17,14 +17,9 @@ class S3BucketEncryptionSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_s3_bucket_server_side_encryption_configuration':
-            if 'rule' in conf:
-                return CheckResult.PASSED
-
-        if entity_type == 'aws_s3_bucket':
-            if 'server_side_encryption_configuration' in conf:
-                return CheckResult.PASSED
-
+        # Check for encryption configuration in either resource type
+        if 'rule' in conf or 'server_side_encryption_configuration' in conf:
+            return CheckResult.PASSED
         return CheckResult.FAILED
 
 
@@ -38,22 +33,24 @@ class EBSVolumeEncryptionSOC2(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources, guideline=guideline)
 
     def scan_resource_conf(self, conf):
-        if entity_type == 'aws_ebs_volume':
-            if conf.get('encrypted', [False])[0] is True:
-                return CheckResult.PASSED
+        # Direct encryption check (for aws_ebs_volume)
+        if conf.get('encrypted', [False])[0] is True:
+            return CheckResult.PASSED
 
-        if entity_type == 'aws_instance':
-            ebs_block_devices = conf.get('ebs_block_device', [])
-            if ebs_block_devices:
-                for device in ebs_block_devices:
-                    if not device.get('encrypted', [False])[0]:
-                        return CheckResult.FAILED
-                return CheckResult.PASSED
-            root_block_device = conf.get('root_block_device', [])
-            if root_block_device:
-                for device in root_block_device:
-                    if device.get('encrypted', [False])[0] is True:
-                        return CheckResult.PASSED
+        # Check EBS block devices (for aws_instance)
+        ebs_block_devices = conf.get('ebs_block_device', [])
+        if ebs_block_devices:
+            for device in ebs_block_devices:
+                if not device.get('encrypted', [False])[0]:
+                    return CheckResult.FAILED
+            return CheckResult.PASSED
+
+        # Check root block device (for aws_instance)
+        root_block_device = conf.get('root_block_device', [])
+        if root_block_device:
+            for device in root_block_device:
+                if device.get('encrypted', [False])[0] is True:
+                    return CheckResult.PASSED
 
         return CheckResult.FAILED
 
