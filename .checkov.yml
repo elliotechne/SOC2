@@ -1,0 +1,61 @@
+# Checkov Configuration File for SOC2 Compliance
+# Place this file at the root of your infrastructure repository
+
+# Enable/disable specific frameworks
+framework:
+  - terraform
+
+# Directory configuration
+directory:
+  - terraform/
+
+# External checks directory
+external-checks-dir:
+  - checkov_policies/
+
+# Output configuration
+output: cli
+
+# Compact output (less verbose)
+compact: false
+
+# Quiet mode (only show failed checks)
+quiet: false
+
+# Skip certain checks (use sparingly and document why)
+# skip-check:
+#   - CKV_SOC2_AWS_001  # Example: Skip if you have a documented exception
+
+# Skip specific resources by file path
+# skip-path:
+#   - terraform/legacy/  # Skip legacy infrastructure
+
+# Soft fail mode - exit code 0 even with failures
+# Useful during initial adoption
+soft-fail: false
+
+# Download external modules
+download-external-modules: true
+
+# Evaluate variables
+evaluate-variables: true
+
+# External modules download timeout (seconds)
+external-modules-download-path: .external_modules
+
+# Create a baseline file to track suppressions
+# baseline: soc2-baseline.json
+
+# Framework-specific settings
+terraform-plan-file:
+
+# For CI/CD - continue scanning even after finding issues
+check:
+  # Optionally specify only certain checks to run
+  # - CKV_SOC2_AWS_
+  # - CKV_SOC2_GCP_
+  # - CKV_SOC2_DO_
+
+# Repository metadata (for reporting)
+# repo-id: my-org/my-repo
+# branch: main
