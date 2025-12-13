@@ -1,0 +1,64 @@
+name: SOC2 Compliance Check
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+
+jobs:
+  checkov:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Run Checkov SOC2 compliance scan
+        run: |
+          checkov -d . \
+            --external-checks-dir ./checkov_policies \
+            --framework terraform \
+            -o cli \
+            --compact
+        continue-on-error: true
+
+      - name: Generate SARIF report
+        run: |
+          checkov -d . \
+            --external-checks-dir ./checkov_policies \
+            --framework terraform \
+            -o sarif \
+            --output-file-path . \
+            --compact \
+            --quiet 2>&1 | tail -n +8 || true
+        continue-on-error: true
+
+      - name: Verify SARIF file
+        run: |
+          if [ -f "results_sarif.sarif" ]; then
+            echo "SARIF file generated successfully"
+            python3 -m json.tool results_sarif.sarif > /dev/null && echo "SARIF is valid JSON" || echo "SARIF is invalid JSON"
+          else
+            echo "ERROR: SARIF file not found"
+            exit 1
+          fi
+
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('results_sarif.sarif') != ''
+        with:
+          sarif_file: results_sarif.sarif
+          category: checkov-soc2
