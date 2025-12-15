@@ -1,6 +1,6 @@
 # SOC2 Compliance Checkov Policies for Terraform
 
-Custom Checkov policies for SOC2 compliance validation across AWS, GCP, and DigitalOcean infrastructure as code.
+Custom Checkov policies for SOC2 compliance validation across AWS, GCP, Azure, and DigitalOcean infrastructure as code.
 
 ## Overview
 
@@ -16,6 +16,7 @@ This repository contains comprehensive Checkov custom policies designed to valid
 
 - **AWS** (Amazon Web Services)
 - **GCP** (Google Cloud Platform)
+- **Azure** (Microsoft Azure)
 - **DigitalOcean**
 
 ## Policy Categories
@@ -91,6 +92,11 @@ checkov -d /path/to/terraform/code --external-checks-dir ./checkov_policies --fr
 For GCP only:
 ```bash
 checkov -d /path/to/terraform/code --external-checks-dir ./checkov_policies --framework terraform --check-pattern "CKV_SOC2_GCP_.*"
+```
+
+For Azure only:
+```bash
+checkov -d /path/to/terraform/code --external-checks-dir ./checkov_policies --framework terraform --check-pattern "CKV_SOC2_AZURE_.*"
 ```
 
 For DigitalOcean only:
@@ -173,6 +179,59 @@ soc2-compliance:
 | CKV_SOC2_GCP_201 | Project logging enabled | Logging |
 | CKV_SOC2_GCP_301 | Firewall ingress restrictions | Network Security |
 | CKV_SOC2_GCP_401 | Cloud SQL backups | Backup & Recovery |
+
+### Azure Policies
+
+| Policy ID | Description | Category |
+|-----------|-------------|----------|
+| CKV_SOC2_AZURE_001 | Storage Account encryption | Encryption |
+| CKV_SOC2_AZURE_002 | Managed Disk encryption | Encryption |
+| CKV_SOC2_AZURE_003 | SQL Database TDE | Encryption |
+| CKV_SOC2_AZURE_004 | PostgreSQL SSL enforcement | Encryption |
+| CKV_SOC2_AZURE_005 | MySQL SSL enforcement | Encryption |
+| CKV_SOC2_AZURE_006 | CosmosDB encryption | Encryption |
+| CKV_SOC2_AZURE_007 | Application Gateway HTTPS | Encryption |
+| CKV_SOC2_AZURE_008 | Data Lake Store encryption | Encryption |
+| CKV_SOC2_AZURE_009 | AKS disk encryption | Encryption |
+| CKV_SOC2_AZURE_101 | Storage Account public access | Access Control |
+| CKV_SOC2_AZURE_102 | Key Vault access policies | Access Control |
+| CKV_SOC2_AZURE_103 | Key Vault public access | Access Control |
+| CKV_SOC2_AZURE_104 | SQL Server Azure AD admin | Access Control |
+| CKV_SOC2_AZURE_105 | PostgreSQL Azure AD auth | Access Control |
+| CKV_SOC2_AZURE_106 | Container Registry admin | Access Control |
+| CKV_SOC2_AZURE_107 | AKS RBAC enabled | Access Control |
+| CKV_SOC2_AZURE_108 | AKS local accounts | Access Control |
+| CKV_SOC2_AZURE_109 | Function App managed identity | Access Control |
+| CKV_SOC2_AZURE_110 | App Service managed identity | Access Control |
+| CKV_SOC2_AZURE_111 | VM password authentication | Access Control |
+| CKV_SOC2_AZURE_201 | Storage Account logging | Logging |
+| CKV_SOC2_AZURE_202 | Key Vault diagnostics | Logging |
+| CKV_SOC2_AZURE_203 | SQL Server auditing | Logging |
+| CKV_SOC2_AZURE_204 | PostgreSQL log checkpoints | Logging |
+| CKV_SOC2_AZURE_205 | PostgreSQL log connections | Logging |
+| CKV_SOC2_AZURE_206 | MySQL audit log | Logging |
+| CKV_SOC2_AZURE_207 | AKS monitoring | Logging |
+| CKV_SOC2_AZURE_208 | App Service logging | Logging |
+| CKV_SOC2_AZURE_209 | Network Watcher flow log retention | Logging |
+| CKV_SOC2_AZURE_210 | Log Analytics retention | Logging |
+| CKV_SOC2_AZURE_301 | NSG SSH restrictions | Network Security |
+| CKV_SOC2_AZURE_302 | NSG RDP restrictions | Network Security |
+| CKV_SOC2_AZURE_303 | Subnet NSG association | Network Security |
+| CKV_SOC2_AZURE_304 | SQL firewall rules | Network Security |
+| CKV_SOC2_AZURE_305 | PostgreSQL firewall rules | Network Security |
+| CKV_SOC2_AZURE_306 | AKS network policy | Network Security |
+| CKV_SOC2_AZURE_307 | AKS authorized IP ranges | Network Security |
+| CKV_SOC2_AZURE_308 | App Service VNet integration | Network Security |
+| CKV_SOC2_AZURE_309 | Function App VNet integration | Network Security |
+| CKV_SOC2_AZURE_401 | VM backup configuration | Backup & Recovery |
+| CKV_SOC2_AZURE_402 | SQL Database backup retention | Backup & Recovery |
+| CKV_SOC2_AZURE_403 | PostgreSQL backup retention | Backup & Recovery |
+| CKV_SOC2_AZURE_404 | MySQL backup retention | Backup & Recovery |
+| CKV_SOC2_AZURE_405 | Storage Account replication | Backup & Recovery |
+| CKV_SOC2_AZURE_406 | Recovery Vault backup policy | Backup & Recovery |
+| CKV_SOC2_AZURE_407 | SQL Database geo-replication | Backup & Recovery |
+| CKV_SOC2_AZURE_408 | CosmosDB backup | Backup & Recovery |
+| CKV_SOC2_AZURE_409 | AKS availability zones | Backup & Recovery |
 
 ### DigitalOcean Policies
 
@@ -278,7 +337,7 @@ For issues or questions:
 
 ## Roadmap
 
-- [ ] Add support for Azure
+- [x] Add support for Azure
 - [ ] Include custom severity levels
 - [ ] Add automated remediation suggestions
 - [ ] Integrate with compliance frameworks (HIPAA, PCI-DSS)
